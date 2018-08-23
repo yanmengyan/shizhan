@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8">
+	<title>合同列表</title>
+</head>
+<body>
+<title>合同列表</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<link rel="stylesheet" href="../ICPlatform/css/model.css" type="text/css">
+<link rel="stylesheet" href="../ICPlatform/css/model_info.css" type="text/css">
+<LINK rel=stylesheet type=text/css href="../smp_files/zTreeStyle.css">
+<link rel="stylesheet" href="../ICPlatform/plugins/easyUI/themes/default/easyui.css" type="text/css">
+<link rel="stylesheet" href="../ICPlatform/plugins/easyUI/themes/icon.css" type="text/css">
+
+<script src="../ICPlatform/js/jquery-1.7.1.js" type="text/javascript"></script>
+<script src="../ICPlatform/js/easytooltip.js" type="text/javascript"></script>
+<script src="../ICPlatform/js/jquery.form.js" type="text/javascript"></script>
+<script src="../ICPlatform/plugins/easyUI/jquery.easyui.min.js" type="text/javascript"></script>
+<SCRIPT type=text/javascript src="../smp_files/easyui-lang-zh_CN.js"></SCRIPT>
+
+
+<style type="text/css">
+	.td_1 {
+		font-size: 12px;
+	}
+
+</style>
+<style type="text/css">
+	td {
+		text-align: center;
+
+	}
+</style>
+<script>
+
+
+
+    $(function () {
+        var fromDate;
+
+        $('#idNumber').validatebox({
+            required: true,
+            validType: 'idcard'
+        });
+
+        //客户姓名和证件号验证
+        $.extend($.fn.validatebox.defaults.rules, {
+            idcard: {
+                validator: function (value) {
+                    return /^\d{15}(\d{2}[A-Za-z0-9])?$/i.test(value);
+                },
+                message: '证件号码格式不正确'
+            },
+            checkDateTime: {
+                validator: function (value, param) {
+                    fromDate = $(param[0]).val();
+                    if (fromDate != "") {
+                        if (fromDate.replace(/-/g, "") > value.replace(/-/g, "")) {
+                            return false;
+                        } else {
+                            return true;
+                        }
+                    } else {
+                        return true;
+                    }
+                },
+                message: '开始日期应小于结束日期'
+            }
+        });
+
+        var sValue = $("#loanKind").val();
+        $('#loanKindName').combobox({
+            onBeforeLoad: function (param) {
+                if (sValue != "") {
+                    $('#loanKindName').combobox('select', [sValue]);
+                }
+            },
+            onSelect: function (rec) {
+                $("#loanKind").val(rec.value);
+            }
+        });
+    });
+
+
+//查看还款情况
+    function serachLoanContract() {
+
+        var row = $("#dg").datagrid("getSelected");
+        var loanContractNum = row.loanContractNum;
+        var href = '/common/查看还款情况页面.html?loanContractNum='+loanContractNum;
+        window.open(href,    '_self',    'scrollbars=yes');
+        return  false
+    }
+
+    //修改还款情况
+    function editLoanContract() {
+        var row = $("#dg").datagrid("getSelected");
+        var loanContractNum = row.loanContractNum;
+        var href = '/common/修改还款情况页面.html?loanContractNum='+loanContractNum;
+        window.open(href,    '_self',    'scrollbars=yes');
+        return  false
+    }
+
+    function getSearchParam() {
+        var info={};
+        info["loanContractNum"]=$('#loanContractNum').val();
+         info["clientName"] = $('#clientName').val();
+         info["identityNum"] = $('#identityNum').val();
+        info["deptName"] = $('#deptName').val();
+
+        return info;
+
+    }
+
+    //重置
+    function clearForm() {
+        $('#clientName').val("");
+        $('#idNumber').val("");
+        $('#selectedOffice').datebox('setValue', '');
+        $('#productsTypeName').datebox('setValue', '');
+        $('#productsTypeName').combobox('select', "");
+    }
+
+    function searchInfo(){
+        var param = getSearchParam();
+        $("#dg").datagrid({queryParams:param});
+        $("#dg").datagrid("reload",info);
+    }
+
+
+</script>
+
+<script type="text/javascript">
+    var p = $("#dg").datagrid("getPager");
+    p.pagination(
+        {
+
+
+   		 onChangePageSize: function (pageSize) {
+                p.pagination('refresh')
+            },
+            onSelectPage: function (pageNumber, pageSize) {
+                searchInfo();
+            }
+        }
+    )
+
+    $(document).ready(function () {
+        $('table.datagrid-htable').find('.datagrid-cell').css("text-align", 'center');
+        $('table.datagrid-btable').find('.datagrid-cell-c1-item_id23').css("text-align", 'right');
+        $('table.datagrid-btable').find('.datagrid-cell-c1-item_id30').css("text-align", 'right');
+        $('table.datagrid-btable').find('.datagrid-cell-c1-item_id34').css("text-align", 'right');
+    });
+</script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('table.datagrid-htable').find('.datagrid-cell').css("text-align", 'center');
+        $('table.datagrid-btable').find('.datagrid-cell').css("text-align", 'center');
+        $('table.datagrid-btable').find('.datagrid-cell-c1-item_id23').css("text-align", 'right');
+        $('table.datagrid-btable').find('.datagrid-cell-c1-item_id27').css("text-align", 'right');
+        $('table.datagrid-btable').find('.datagrid-cell-c1-item_id30').css("text-align", 'right');
+
+        $('#dd').combotree('loadData', [{
+            id: 1, text: '贷款品种', children: [
+                {id: 11, text: '新薪贷'},
+                {id: 12, text: '学信通'},
+                {id: 13, text: '精英贷'},
+                {id: 14, text: '助学贷'},
+                {id: 15, text: '助业贷'},
+                {id: 16, text: '助业宜楼贷'},
+                {id: 17, text: '新薪宜楼贷'},
+                {id: 18, text: '学历贷'},
+                {id: 19, text: '宜商贷'},
+                {id: 20, text: '宜车贷'},
+                {id: 21, text: '小企业贷'},
+                {id: 22, text: '房贷'},
+                {id: 23, text: '慧聪（高级）'},
+                {id: 24, text: '慧聪（三年）'},
+                {id: 25, text: '慧聪（普通）'}
+            ]
+        }]);
+
+    });
+</script>
+
+<div>&nbsp;</div>
+<form id="searchForm" method="post">
+	<table style="height: auto; width: 100%;">
+		<tbody>
+		<tr>
+
+
+			<td width="10%" class="td_1">
+				合同编号：
+			</td>
+			<td width="20%">
+				<input id="loanContractNum" name="loanContractNum" style="width:188px;" value="">
+			</td>
+
+			<td width="10%" class="td_1">
+				客户姓名：
+			</td>
+
+			<td width="20%">
+				<input id="clientName" name="clientName" style="width:188px;" value="">
+			</td>
+
+			<td width="10%" class="td_1">
+				证件号：
+			</td>
+			<td width="20%">
+				<input id="identityNum" name="identityNum" style="width:188px;" value="">
+			</td>
+
+		</tr>
+
+		<tr>
+
+			<td width="8%" class="td_1">贷款品种：</td>
+			<td width="26%">
+                <span class="searchbox" style="width:189px;">
+								<input class="searchbox-text" type="text" id="loanVarietyId"
+									   name="loanVarietyId" style="width:169px;" value=""
+									   data-options="required:'true'">
+								<span class="searchbox-button" onClick="deptree('open');"></span>
+								</span>
+			</td>
+
+			<td width="10%" class="td_1">城市地区：</td>
+			<td width="20%">
+				<input id="deptAddress" name="deptAddress" style="width:188px;" value="">
+			</td>
+
+
+			<td width="10%" class="td_1">营业部：</td>
+			<td width="20%">
+				<input id="deptName" name="deptName" style="width:188px;" value="">
+			</td>
+		</tr>
+		<tr>
+			<td width="10%" class="td_1">合同状态：</td>
+			<td width="20%">
+				<select class="easyui-combobox combobox-f combo-f" id="contractType" style="width: 195px; display: none;"
+						editable="fales" name="type">
+					<option value="0">请选择</option>
+					<option value="1">合同废止</option>
+					<option value="2">未放款</option>
+					<option value="3">还款中</option>
+					<option value="4">逾期</option>
+					<option value="5">正常结清</option>
+					<option value="6">合同终止</option>
+					<option value="7">合同核销</option>
+					<option value="8">减免结清</option>
+					<option value="9">特殊减免结清</option>
+					<option value="10">提前结清</option>
+					<option value="11">放款退回结清</option>
+
+				</select>
+			</td>
+
+			<td width="10%" class="td_1">合同签订时间：</td>
+			<td width="20%">
+				<input type="text" id="createTimeStart" style="width: 80px; display: none;" class="easyui-datetimebox"
+					   value="" comboname="createTimeStart">
+				-
+				<input type="text" id="createTimeEnd" style="width: 80px; display: none;" class="easyui-datetimebox"
+					   value="" data-options="validType:'checkDateTime[\'#searchForm input[name=createTimeStart]\']'"
+					   comboname="createTimeEnd">
+			</td>
+
+			<td width="10%" class="td_1">放款时间：</td>
+			<td width="20%">
+				<input type="text" id="putTimeStart" style="width: 80px; display: none;" class="easyui-datetimebox"
+					   value="" comboname="putTimeStart">
+				-
+				<input type="text" id="putTimeEnd" style="width: 80px; display: none;" class="easyui-datetimebox"
+					   value="" data-options="validType:'checkDateTime[\'#searchForm input[name=putTimeStart]\']'"
+					   comboname="putTimeEnd">
+			</td>
+
+
+		</tr>
+
+		<tr>
+			<td width="10%" class="td_1">信托机构：</td>
+			<td width="20%">
+				<select class="easyui-combobox combobox-f combo-f" id="trustAgencyId" style="width: 195px; display: none;"
+						editable="fales" name="trustAgencyId">
+					<option></option>
+					<option value="1">中航信托</option>
+					<option value="2">华澳华宜</option>
+
+
+				</select>
+			</td>
+
+
+			<td width="10%" class="td_1">信托产品系列：</td>
+			<td width="20%">
+				<select class="easyui-combobox combobox-f combo-f" id="trustSeriesId" style="width: 195px; display: none;"
+						editable="fales" name="trustSeriesId">
+					<option></option>
+					<option value="1">天宜</option>
+					<option value="2">天驰</option>
+					<option value="3">天惠</option>
+				</select>
+			</td>
+
+			<td width="10%" class="td_1">信托计划：</td>
+			<td width="20%">
+				<select class="easyui-combobox combobox-f combo-f" id="trustPlanId" style="width: 195px; display: none;"
+						editable="fales" name="trustPlanId">
+					<option></option>
+					<option value="1">1号</option>
+					<option value="2">2号</option>
+					<option value="3">3号</option>
+					<option value="4">4号</option>
+					<option value="5">5号</option>
+					<option value="6">6号</option>
+				</select>
+			</td>
+
+		</tr>
+
+		<tr>
+
+
+			<td width="8%" class="td_1">业务模式：</td>
+			<td width="26%">
+				<select class="easyui-combobox combobox-f combo-f" id="businessType"
+						style="width: 190px; display: none;" editable="fales" name="businessType">
+					<option></option>
+					<option value="1">信托</option>
+					<option value="2">转债权</option>
+					<option value="3">融资租赁</option>
+					<option value="4">火凤凰</option>
+					<option value="5">互联网</option>
+				</select>
+
+			</td>
+
+			<td width="8%" class="td_1">合同变更类型：</td>
+			<td width="26%">
+				<select class="easyui-combobox combobox-f combo-f" id="changeType"
+						style="width: 190px; display: none;" editable="fales" name="changeType">
+					<option></option>
+					<option value="1">转产品</option>
+					<option value="2">展期</option>
+				</select>
+
+			</td>
+
+
+		</tr>
+
+
+		<tr>
+			<td width="10%" class="td_1"></td>
+			<td width="20%">
+			<td width="10%" class="td_1"></td>
+			<td width="20%">
+			<td width="10%" class="td_1"></td>
+			<td width="20%">
+
+				<a href="javascript:void(0)" class="easyui-linkbutton l-btn" onClick="searchInfo();" group="">查询
+				</a>
+				&nbsp;
+				<a href="javascript:void(0)" class="easyui-linkbutton l-btn" onClick="clearForm()" group="" id="">重置
+				</a>
+
+			</td>
+
+			</br>
+		</tr>
+
+		</tbody>
+	</table>
+</form>
+
+<div>&nbsp;</div>
+<div class="panel datagrid" style="width: auto;">
+	<div class="panel-header" style="width: auto;">
+		<div class="panel-title">合同列表</div>
+		<div class="panel-tool"></div>
+	</div>
+
+	<table id="dg" class="easyui-datagrid" style="width:auto;height:250px"
+		   pagination="true" data-options="url:'/selectByInfo',toolbar:'#tb',singleSelect:true,pageSize:2,pageList:[1,2,5,10]"
+
+	>
+		<thead>
+		<tr>
+			<th data-options="field:'loanContractNum',width:100">合同编号</th>
+			<th data-options="field:'contractType',width:100">合同状态</th>
+			<th data-options="field:'clientName',width:100">客户姓名</th>
+			<th data-options="field:'identityType',width:120">证件类型</th>
+			<th data-options="field:'identityNum',width:150">证件号</th>
+			<th data-options="field:'varietyName',width:100">贷款品种</th>
+			<th data-options="field:'businessType',width:100">业务模式</th>
+			<th data-options="field:'agencyName',width:100">信托机构</th>
+			<th data-options="field:'trustSeriesName',width:100">信托产品系列</th>
+			<th data-options="field:'trustPlanName',width:100">信托计划</th>
+			<th data-options="field:'deptAddress',width:100">城市地区</th>
+			<th data-options="field:'deptName',width:100">营业部</th>
+			<th data-options="field:'isExpedited',width:100">是否加急</th>
+			<th data-options="field:'signType',width:100">签约方式</th>
+			<th data-options="field:'createTime',width:150">合同签订时间</th>
+			<th data-options="field:'changeType',width:100">合同变更类型</th>
+			<th data-options="field:'changeMoney',width:100">合同变更金额</th>
+			<th data-options="field:'loanInstalments',width:100">分期数</th>
+			<th data-options="field:'isRecycleLoad',width:100">是否循环贷</th>
+			<th data-options="field:'recycleLoanCnt',width:100">循环贷次数</th>
+			<th data-options="field:'startDate',width:100">还款起始日期</th>
+			<th data-options="field:'endDate',width:100">还款终止日期</th>
+			<th data-options="field:'settleDate',width:110">合同结清日期</th>
+			<th data-options="field:'loanAmount',width:100">借款金额</th>
+			<th data-options="field:'repayAccountBankid',width:100">还款银行</th>
+			<th data-options="field:'repayAcctIdenNum',width:150">还款银行账号</th>
+			<th data-options="field:'preFee',width:100">前期费用总额</th>
+			<th data-options="field:'loanType',width:100">放款模式</th>
+			<th data-options="field:'putTime',width:150">放款时间</th>
+			<th data-options="field:'putAmount',width:100">放款金额</th>
+		</tr>
+		</thead>
+
+	</table>
+	<div id="tb" style="padding:5px;height:auto">
+		<div style="margin-bottom:5px">
+			<a href="#" class="easyui-linkbutton" iconCls="icon-search" plain="true" onclick="serachLoanContract()">查看还款情况</a>
+			<a href="#" class="easyui-linkbutton" iconCls="icon-edit" plain="true" onclick="editLoanContract()">修改还款情况</a>
+		</div>
+	</div>
+</div>
+
+<script type="text/javascript">
+
+
+
+
+</script>
+
+</body>
+
+
+
+</html>

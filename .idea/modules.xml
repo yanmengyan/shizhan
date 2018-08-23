@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/shizhan.iml" filepath="$PROJECT_DIR$/.idea/shizhan.iml" />
+      <module fileurl="file://$PROJECT_DIR$/shizhan-bean/shizhan-bean.iml" filepath="$PROJECT_DIR$/shizhan-bean/shizhan-bean.iml" />
+      <module fileurl="file://$PROJECT_DIR$/shizhan-interface/shizhan-interface.iml" filepath="$PROJECT_DIR$/shizhan-interface/shizhan-interface.iml" />
+      <module fileurl="file://$PROJECT_DIR$/shizhan-service/shizhan-service.iml" filepath="$PROJECT_DIR$/shizhan-service/shizhan-service.iml" />
+      <module fileurl="file://$PROJECT_DIR$/shizhan-web/shizhan-web.iml" filepath="$PROJECT_DIR$/shizhan-web/shizhan-web.iml" />
+      <module fileurl="file://$PROJECT_DIR$/shizhanmaven/shizhanmaven.iml" filepath="$PROJECT_DIR$/shizhanmaven/shizhanmaven.iml" />
+    </modules>
+  </component>
+</project>

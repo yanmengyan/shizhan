@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="shizhan-bean" />
+        <module name="shizhan-interface" />
+        <module name="shizhan-service" />
+        <module name="shizhan-web" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="bean" target="1.5" />
+      <module name="shizhan-bean" target="1.8" />
+      <module name="shizhan-interface" target="1.8" />
+      <module name="shizhan-service" target="1.8" />
+      <module name="shizhan-web" target="1.8" />
+      <module name="shizhanmaven" target="1.8" />
+    </bytecodeTargetLevel>
+  </component>
+</project>

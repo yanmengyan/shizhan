@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper SYSTEM "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.atguigu.shizhan.mapper.HeTongMapper">
+    <resultMap id="heTongMapper" type="com.atguigu.shizhan.bean.NplmLoanContract" autoMapping="true">
+        <id property="id" column="id" ></id>
+
+        <collection property="borrowerInfos" ofType="com.atguigu.shizhan.bean.NplmBorrowerInfo" autoMapping="true">
+            <id property="id" column="borrower_id"></id>
+        </collection>
+
+        <collection property="contractAttributes" ofType="com.atguigu.shizhan.bean.NplmContractAttribute" autoMapping="true">
+            <result property="loanContractNum" column="LOAN_CONTRACT_NUM"></result>
+        </collection>
+    </resultMap>
+
+    <select id="getAllLoanContract" resultMap="heTongMapper">
+        select *
+        from nplm_loan_contract a,nplm_borrower_info b,nplm_contract_attribute c
+        where a.borrower_id=b.id and a.LOAN_CONTRACT_NUM=c.LOAN_CONTRACT_NUM
+    </select>
+
+
+</mapper>
